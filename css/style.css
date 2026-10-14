@@ -1,0 +1,871 @@
+:root {
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --line: #262626;
+  --text: #e8e8e6;
+  --muted: #9a9a9a;
+  --accent: #f0c860;
+  --accent-ink: #0a0a0a;
+
+  /* 書体
+     見出し・歌詞＝Cormorant（英字）、和文は Shippori Mincho
+     散文＝明朝、それ以外の本文＝ゴシック */
+  --font-latin: "Cormorant Garamond", "Shippori Mincho B1", "Hiragino Mincho ProN", serif;
+  --font-mincho: "Shippori Mincho B1", "Hiragino Mincho ProN", serif;
+  --font-body: "Noto Sans JP", "Hiragino Sans", system-ui, sans-serif;
+
+  /* 寸法 */
+  --max: 1280px;
+  --narrow: 720px;
+  --gutter: 16px;
+  --grid-gap: 16px;
+  --icon-size: 32px;
+
+  /* 画面の右端からコンテンツの右端までの距離
+     （固定表示のメニューボタンとトップへ戻るボタンを、コンテンツの右端にそろえる） */
+  --edge: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+}
+
+@media (min-width: 720px) {
+  :root {
+    --gutter: 32px;
+    --grid-gap: 24px;
+  }
+}
+
+/* ---------- ページ移動：ジャケットがつながって見えるアニメーション ---------- */
+/* トップのジャケットと曲ページのジャケットに、同じ view-transition-name を
+   HTML側で付けている。名前が同じ画像どうしが、位置と大きさを変えながらつながる */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-group(*) {
+  animation-duration: 0.5s;
+}
+
+/* ---------- レコード盤の模様（トップのホバーと曲ページで共通） ---------- */
+/* 円盤を回すときは、要素そのものではなく模様の角度 --vinyl-angle を回す。
+   要素を回転させると、回転した四角の分だけ画面の横幅からはみ出すため */
+@property --vinyl-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.works__link::before,
+.song__jacket::before {
+  --vinyl:
+    /* 中心の穴 */
+    radial-gradient(circle closest-side, var(--bg) 0 4%, transparent 4.5%),
+    /* ラベルの外側の無地の帯（四角いラベルの角も隠す） */
+    radial-gradient(circle closest-side, transparent 0 30%, #1a1a1a 30.5% 43%, transparent 43.5%),
+    /* ラベル：半分ずつ色を変え、回っていることが見えるようにする */
+    conic-gradient(from var(--vinyl-angle), var(--accent) 0 50%, #7a5c14 50% 100%) center / 30% 30% no-repeat,
+    /* 光の筋 */
+    conic-gradient(
+      from var(--vinyl-angle),
+      transparent 0 4%,
+      rgb(255 255 255 / 0.45) 9%,
+      transparent 14% 29%,
+      rgb(255 255 255 / 0.25) 34%,
+      transparent 39% 54%,
+      rgb(255 255 255 / 0.45) 59%,
+      transparent 64% 79%,
+      rgb(255 255 255 / 0.25) 84%,
+      transparent 89%
+    ),
+    /* 溝 */
+    repeating-radial-gradient(circle, #222 0 1px, #141414 1px 4px);
+}
+
+/* ---------- 土台 ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3 { font-family: var(--font-latin); font-weight: 600; line-height: 1.4; margin: 0; }
+
+p { margin: 0; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+::selection { background: var(--accent); color: var(--accent-ink); }
+
+/* ---------- レイアウト ---------- */
+.l-container {
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ---------- ヘッダー ---------- */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 24px;
+  row-gap: 12px;
+  padding-block: 20px;
+  /* 右端に固定したメニューボタンと重ならないよう空けておく */
+  padding-right: 56px;
+}
+
+.header__title {
+  margin-right: auto;
+  font-family: "Caveat", cursive;
+  font-size: clamp(1.25rem, 1rem + 1.5vw, 1.75rem);
+  letter-spacing: 0.06em;
+}
+
+/* ---------- ヘッダー：外部リンクのアイコン ---------- */
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social__link {
+  display: block;
+  transition: opacity 0.2s;
+}
+
+@media (hover: hover) {
+  .social__link:hover { opacity: 0.7; }
+}
+
+.social__icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  object-fit: contain;
+}
+
+/* ---------- ハンバーガーメニュー ---------- */
+/* チェックボックスは見た目だけ隠す（キーボードでは操作できる状態を残す）
+   fixed にしておく。absolute だと、ボタンを押したときにチェックボックスへ
+   フォーカスが移り、ページが一番上まで飛んでしまうため */
+.menu__toggle {
+  position: fixed;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ボタンは画面に固定する。下までスクロールしても、メニューを開いた後でも押せるようにするため */
+.menu__icon {
+  position: fixed;
+  top: 16px;
+  right: var(--edge);
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 44px;
+  height: 44px;
+  padding-inline: 10px;
+  background: rgb(10 10 10 / 0.8);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.menu__line {
+  display: block;
+  height: 2px;
+  background: var(--text);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* キーボードで選んだとき、隠したチェックボックスの代わりにボタンへ枠を出す */
+.menu__toggle:focus-visible + .menu__icon {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* 開いたら三本線を×にする */
+.menu__toggle:checked + .menu__icon .menu__line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.menu__toggle:checked + .menu__icon .menu__line:nth-child(2) { opacity: 0; }
+.menu__toggle:checked + .menu__icon .menu__line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+.header-nav {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: rgb(10 10 10 / 0.96);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.menu__toggle:checked ~ .header-nav {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* メニューを開いている間は、裏のページをスクロールさせない */
+body:has(.menu__toggle:checked) { overflow: hidden; }
+
+.header-nav__list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+/* 開いたとき、項目を上から順に少しずつ表示する */
+.header-nav__item {
+  opacity: 0;
+  translate: 0 12px;
+  transition: opacity 0.4s, translate 0.4s;
+}
+
+.menu__toggle:checked ~ .header-nav .header-nav__item {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.menu__toggle:checked ~ .header-nav .header-nav__item:nth-child(2) { transition-delay: 0.06s; }
+.menu__toggle:checked ~ .header-nav .header-nav__item:nth-child(3) { transition-delay: 0.12s; }
+.menu__toggle:checked ~ .header-nav .header-nav__item:nth-child(4) { transition-delay: 0.18s; }
+.menu__toggle:checked ~ .header-nav .header-nav__item:nth-child(5) { transition-delay: 0.24s; }
+
+.header-nav__link {
+  font-family: var(--font-latin);
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+  transition: color 0.2s;
+}
+
+@media (hover: hover) {
+  .header-nav__link:hover { color: var(--accent); }
+}
+
+/* ---------- ジャケットのグリッド ---------- */
+.works {
+  padding-block: 16px 64px;
+}
+
+.works__title {
+  margin-bottom: 24px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* スマホ1列 → タブレット2列 → PC4列 */
+.works__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--grid-gap);
+  row-gap: 40px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .works__list { grid-template-columns: repeat(2, 1fr); row-gap: 48px; }
+}
+
+@media (min-width: 1024px) {
+  .works__list { grid-template-columns: repeat(4, 1fr); }
+}
+
+.works__link {
+  position: relative;
+  display: block;
+  /* レコード盤をこのリンクの中に閉じ込め、ジャケットの裏に置く */
+  isolation: isolate;
+}
+
+.works__jacket {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  /* 画像が読み込まれるまでの下地 */
+  background: var(--surface);
+  /* 縮むときは左側に寄せ、右側にレコード盤が見える場所を作る */
+  transform-origin: left center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ジャケットの裏に隠れているレコード盤 */
+.works__link::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: var(--vinyl);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
+}
+
+/* カーソルを合わせると、ジャケットがひょこっと浮きながら縮み、
+   右側からレコード盤が出てくる。セルの幅からはみ出さない範囲で動かす */
+@media (hover: hover) {
+  .works__link:hover .works__jacket { transform: translateY(-8px) scale(0.8); }
+  .works__link:hover::before { opacity: 1; transform: translate(10%, -8px) scale(0.8); }
+}
+
+.works__link:focus-visible .works__jacket { transform: translateY(-8px) scale(0.8); }
+.works__link:focus-visible::before { opacity: 1; transform: translate(10%, -8px) scale(0.8); }
+
+/* 画像の下の曲名 */
+.works__name {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--font-latin);
+  font-size: 1.125rem;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+
+@media (hover: hover) {
+  .works__link:hover .works__name { color: var(--text); }
+}
+
+/* ---------- About ---------- */
+.about {
+  max-width: var(--narrow);
+  margin-inline: auto;
+  padding-block: 64px 96px;
+  border-top: 1px solid var(--line);
+}
+
+.about__title {
+  margin-bottom: 24px;
+  font-size: 1.75rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.about__body > * + * {
+  margin-top: 1em;
+}
+
+/* ---------- フッター ---------- */
+.footer {
+  padding: 32px var(--gutter);
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+
+.footer__text {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+/* ---------- トップへ戻る ---------- */
+.to-top {
+  position: fixed;
+  right: var(--edge);
+  bottom: var(--gutter);
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--text);
+  /* 赤褐色で塗りつぶし、暗い背景の上で見つけやすくする */
+  background: #591801;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+/* カーソルを合わせると、少し明るい赤褐色になる */
+@media (hover: hover) {
+  .to-top:hover { background: #822601; }
+}
+
+/* ---------- 動きを減らす設定の人向け ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation: none !important;
+  }
+
+  @view-transition {
+    navigation: none;
+  }
+}
+
+/* ---------- 曲ページ ---------- */
+/* すべて中央ぞろえにし、要素同士の間隔は gap でそろえる */
+.song {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  max-width: var(--narrow);
+  margin-inline: auto;
+  padding-block: 24px 48px;
+  text-align: center;
+}
+
+.song__title {
+  font-size: clamp(1.75rem, 1.2rem + 2.5vw, 2.5rem);
+  letter-spacing: 0.04em;
+}
+
+/* ジャケットを左に置き、右側に裏のレコード盤をのぞかせる */
+.song__jacket {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  isolation: isolate;
+}
+
+.song__jacket-image {
+  width: 80%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--surface);
+  /* 再生中に縮むときは左側に寄せる */
+  transform-origin: left center;
+  transition: scale 0.6s ease;
+}
+
+/* 再生中はジャケットが縮み、裏の円盤が中央のラベルまで見えるようにする */
+.song__jacket.is-playing .song__jacket-image {
+  scale: 0.7;
+}
+
+.song__jacket::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  z-index: -1;
+  width: 76%;
+  aspect-ratio: 1 / 1;
+  background: var(--vinyl);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  translate: 0 -50%;
+}
+
+/* 再生中は円盤を回す。is-playing は js/vinyl.js が再生・停止に合わせて付け外しする。
+   止めたときに角度が最初に戻らないよう、アニメーションは常に付けておき、一時停止と再開を切り替える */
+.song__jacket::before {
+  /* 1.8秒で1回転（LPレコードの回転数、毎分33⅓回転に合わせている） */
+  animation: vinyl-spin 1.8s linear infinite paused;
+  transition: box-shadow 0.6s;
+}
+
+/* 再生中は回しながら、円盤の周りをアクセント色でぼんやり光らせる */
+.song__jacket.is-playing::before {
+  animation-play-state: running;
+  box-shadow: 0 0 48px rgb(240 200 96 / 0.45);
+}
+
+@keyframes vinyl-spin {
+  to { --vinyl-angle: 360deg; }
+}
+
+/* 背景：ジャケットを大きくぼかして暗くし、ページ全体に敷く。
+   画像のパスは各曲ページの HTML 側で指定している */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-position: center;
+  background-size: cover;
+  filter: blur(60px) brightness(0.35) saturate(1.2);
+  /* ぼかしで端が透けないよう、少し大きくしておく */
+  transform: scale(1.2);
+  pointer-events: none;
+}
+
+.song__audio {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* 散文 */
+.song__prose {
+  font-family: var(--font-mincho);
+  line-height: 2.2;
+}
+
+.song__prose > * + * {
+  margin-top: 1em;
+}
+
+/* 一行のテーマ */
+.song__theme {
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+/* ---------- 曲ページ：歌詞 ---------- */
+.song__lyrics {
+  width: 100%;
+  padding-block: 32px;
+  border-block: 1px solid var(--line);
+}
+
+/* 開閉ボタン。標準の三角マークを消し、矢印アイコンだけにする */
+.song__lyrics-summary {
+  display: block;
+  font-family: var(--font-latin);
+  font-size: 1.375rem;
+  letter-spacing: 0.1em;
+  list-style: none;
+  cursor: pointer;
+}
+
+.song__lyrics-summary::-webkit-details-marker {
+  display: none;
+}
+
+.song__lyrics-summary .material-symbols-outlined {
+  vertical-align: middle;
+  transition: transform 0.3s;
+}
+
+/* 開いたら矢印を上向きにする */
+.song__lyrics[open] .song__lyrics-summary .material-symbols-outlined {
+  transform: rotate(180deg);
+}
+
+.song__lyrics-body {
+  margin-top: 32px;
+  font-family: var(--font-latin);
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+/* 歌詞をなめらかに開閉する。対応していないブラウザでは、これまでどおり一瞬で開く */
+@supports (interpolate-size: allow-keywords) {
+  :root { interpolate-size: allow-keywords; }
+
+  .song__lyrics::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size 0.5s ease, content-visibility 0.5s allow-discrete;
+  }
+
+  .song__lyrics[open]::details-content {
+    block-size: auto;
+  }
+}
+
+/* 連（パート）ごとの間を空ける */
+.song__lyrics-body > p + p {
+  margin-top: 1.5em;
+}
+
+/* サイトトップに戻る：楕円で囲んだボタンにする */
+.song__back {
+  display: inline-block;
+  padding: 8px 32px;
+  font-size: 0.9375rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  border: 1px solid var(--muted);
+  border-radius: 999px;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+}
+
+/* カーソルを合わせると、白地に黒文字へ反転する */
+@media (hover: hover) {
+  .song__back:hover {
+    color: var(--bg);
+    background-color: var(--text);
+    border-color: var(--text);
+  }
+}
+
+/* ---------- 最初の画面（ヒーロー） ---------- */
+/* 画面いっぱいの高さにする。ヘッダーの高さ（スマホは2段で約120px、PCは約80px）を引いておく */
+.hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: calc(100svh - 120px);
+  padding-block: 24px 120px;
+}
+
+@media (min-width: 720px) {
+  .hero { min-height: calc(100svh - 80px); }
+}
+
+.hero__list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(12px, 3vw, 48px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 3枚がゆっくり上下に漂う。周期をずらして、揃って動かないようにする */
+.hero__item {
+  width: clamp(88px, 24vw, 300px);
+  animation: hero-float 6s ease-in-out infinite;
+}
+
+/* 真ん中の1枚は少し大きくし、並びに奥行きを出す */
+.hero__item:nth-child(2) {
+  width: clamp(112px, 30vw, 380px);
+  animation-delay: -2s;
+}
+
+.hero__item:nth-child(3) {
+  animation-delay: -4s;
+}
+
+/* 上下に動く幅。画面の幅に合わせて変え、スマホで12px、PCで最大28px */
+.hero__list {
+  --float-range: clamp(12px, 2.5vw, 28px);
+}
+
+@keyframes hero-float {
+  0%, 100% { translate: 0 calc(var(--float-range) * -1); }
+  50% { translate: 0 var(--float-range); }
+}
+
+.hero__link {
+  display: block;
+}
+
+/* 読み込み時に、3枚が順にふわっと現れる */
+.hero__jacket {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--surface);
+  box-shadow: 0 24px 48px rgb(0 0 0 / 0.5);
+  animation: hero-fade-in 1.2s ease both;
+}
+
+.hero__item:nth-child(2) .hero__jacket { animation-delay: 0.2s; }
+.hero__item:nth-child(3) .hero__jacket { animation-delay: 0.4s; }
+
+@keyframes hero-fade-in {
+  from { opacity: 0; scale: 0.96; }
+  to { opacity: 1; scale: 1; }
+}
+
+/* 下へスクロールできることの目印（Works へのリンクを兼ねる） */
+.hero__scroll {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-latin);
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+
+@media (hover: hover) {
+  .hero__scroll:hover { color: var(--text); }
+}
+
+/* 短い線の中を、光が上から下へ伸びて消える */
+.hero__scroll-line {
+  position: relative;
+  width: 1px;
+  height: 56px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.hero__scroll-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--text);
+  animation: hero-scroll-line 2s ease-in-out infinite;
+}
+
+@keyframes hero-scroll-line {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  50.1% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ---------- About：英語の本文と、その下の日本語（かっこ書き） ---------- */
+.about__en > * + *,
+.about__ja > * + * {
+  margin-top: 1em;
+}
+
+.about__name {
+  font-family: var(--font-latin);
+  font-size: 1.25rem;
+}
+
+/* 日本語は英語と間を空け、少し小さく控えめな色にする */
+.about__body > .about__ja {
+  margin-top: 3em;
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+/* ---------- About：マウスを乗せると枠線が描かれる ---------- */
+/* 枠線の分だけ内側に余白をとる */
+.about__body {
+  position: relative;
+  padding: 32px 24px;
+}
+
+/* 1本目の枠：四隅から線が伸びて四角になる */
+.about__body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--text), var(--text)) top left / 0 1px no-repeat,
+    linear-gradient(var(--text), var(--text)) top right / 1px 0 no-repeat,
+    linear-gradient(var(--text), var(--text)) bottom right / 0 1px no-repeat,
+    linear-gradient(var(--text), var(--text)) bottom left / 1px 0 no-repeat;
+  transition: background-size 0.6s ease;
+}
+
+/* 2本目・3本目の枠：右下にずれて重なる影の枠。1本目が描かれてから現れる */
+.about__body::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 1px solid var(--muted);
+  /* 背景色の影で中を塗りつぶし、その後ろの線色の影の縁だけを見せる */
+  box-shadow:
+    6px 6px 0 -1px var(--bg),
+    6px 6px 0 0 var(--muted);
+  opacity: 0;
+  translate: -6px -6px;
+  transition: opacity 0.3s ease, translate 0.3s ease;
+}
+
+@media (hover: hover) {
+  .about__body:hover::before {
+    background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%;
+  }
+
+  .about__body:hover::after {
+    opacity: 1;
+    translate: 6px 6px;
+    transition-delay: 0.4s;
+  }
+}
+
+/* ---------- 最初の画面：スマホでは3枚を縦にずらして重ねる ---------- */
+@media (max-width: 719px) {
+  .hero {
+    padding-bottom: 96px;
+  }
+
+  /* 横並びをやめ、縦に並べる */
+  .hero__list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+  }
+
+  /* 左・右・左と互い違いに置き、上下を少し重ねる */
+  /* 幅は画面の横幅と高さの両方で抑え、背の低い画面でも Scroll の目印と重ならないようにする */
+  .hero__item {
+    position: relative;
+    width: min(48%, 22svh);
+  }
+
+  .hero__item:nth-child(1) {
+    align-self: flex-start;
+  }
+
+  /* 真ん中の1枚は少し大きくし、前後の2枚より手前に出す */
+  .hero__item:nth-child(2) {
+    z-index: 1;
+    width: min(54%, 25svh);
+    align-self: flex-end;
+    margin-top: -14%;
+  }
+
+  .hero__item:nth-child(3) {
+    align-self: flex-start;
+    margin-top: -14%;
+    margin-left: 8%;
+  }
+}
+
+.song__suno {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.song__suno-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 24px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  transition: background-color .3s, color .3s;
+}
+
+.song__suno-link:hover {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.song__suno-icon {
+  width: 20px;
+  height: 20px;
+}

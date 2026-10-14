@@ -1,0 +1,62 @@
+/* ---------- 最初の画面：12枚のジャケットの円環 ---------- */
+/* 円環の大きさは、ジャケット1枚の大きさから決める。
+   12枚を30度ずつ並べたとき、隣どうしが少し離れる半径にしている */
+.ring {
+  --count: 12;
+  --size: clamp(120px, 20vw, 280px);
+  --radius: calc(var(--size) * 2);
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: calc(var(--size) * 1.8);
+  /* 手前ほど大きく、奥ほど小さく見せる */
+  perspective: 1400px;
+  /* 円環の左右が画面からはみ出す分は切る（横スクロールさせない） */
+  overflow: clip;
+}
+
+.ring__list {
+  position: relative;
+  width: var(--size);
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transform-style: preserve-3d;
+  /* 60秒で1周（1曲が正面に来るまで約5秒） */
+  animation: ring-spin 60s linear infinite;
+}
+
+/* マウスを乗せている間は止め、押しやすくする */
+@media (hover: hover) {
+  .ring:hover .ring__list {
+    animation-play-state: paused;
+  }
+}
+
+/* 円環を半径の分だけ奥へ下げ、少し上から見下ろす角度にして回す */
+@keyframes ring-spin {
+  from { transform: translateZ(calc(var(--radius) * -1)) rotateX(-8deg) rotateY(0deg); }
+  to   { transform: translateZ(calc(var(--radius) * -1)) rotateX(-8deg) rotateY(-360deg); }
+}
+
+/* 1枚ずつ、30度ずつ回して円周上に立てる。--i は HTML 側で 0〜11 を指定 */
+.ring__item {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(calc(var(--i) * 360deg / var(--count))) translateZ(var(--radius));
+  /* 裏を向いたジャケットは見せない（左右が反転した画像が奥に見えないように） */
+  backface-visibility: hidden;
+}
+
+.ring__link {
+  display: block;
+}
+
+.ring__jacket {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--surface);
+  box-shadow: 0 16px 32px rgb(0 0 0 / 0.5);
+}

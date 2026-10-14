@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 【仮】説明文は中身が決まってから書き直す -->
+    <meta name="description" content="【仮】Hayato.Mの楽曲紹介サイト。">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho+B1:wght@500&display=swap">
+    <script src="js/menu.js" defer></script>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ring.css">
+    <link rel="icon" href="images/favicon.ico">
+    <!-- 【仮】サイトタイトル -->
+    <title>【仮】サイトタイトル</title>
+</head>
+
+<body id="top">
+    <div class="l-container">
+
+        <!-- ============ ヘッダー ============ -->
+        <header class="header">
+            <!-- 【仮】ページタイトル（ロゴ画像にするなら img に差し替え） -->
+            <h1 class="header__title">
+                <a href="index.html" class="header__title-link">【仮】サイトタイトル</a>
+            </h1>
+
+            <ul class="social" role="list">
+                <li class="social__item">
+                    <a href="https://suno.com/@hayatomhayatom" class="social__link social__link--suno" target="_blank"
+                        rel="noopener noreferrer" aria-label="Suno">
+                        <img src="images/icons/suno.png" alt="" class="social__icon">
+                    </a>
+                </li>
+                <li class="social__item">
+                    <a href="https://open.spotify.com/artist/6KswjkK7EKE0DrIaMfzXnm"
+                        class="social__link social__link--spotify" target="_blank" rel="noopener noreferrer"
+                        aria-label="Spotify">
+                        <img src="images/icons/spotify.png" alt="" class="social__icon">
+                    </a>
+                </li>
+                <li class="social__item">
+                    <a href="https://www.instagram.com/hyoutan1975/" class="social__link social__link--instagram"
+                        target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <img src="images/icons/instagram.png" alt="" class="social__icon">
+                    </a>
+                </li>
+                <li class="social__item">
+                    <a href="https://note.com/hay_ato_m" class="social__link social__link--note"
+                        target="_blank" rel="noopener noreferrer" aria-label="note">
+                        <img src="images/icons/note.webp" alt="" class="social__icon">
+                    </a>
+                </li>
+                <li class="social__item">
+                    <a href="https://www.threads.com/@hyoutan1975" class="social__link social__link--threads"
+                        target="_blank" rel="noopener noreferrer" aria-label="Threads">
+                        <img src="images/icons/threads.png" alt="" class="social__icon">
+                    </a>
+                </li>
+                <li class="social__item">
+                    <a href="mailto:prajnyaparamitta@gmail.com" class="social__link social__link--mail"
+                        aria-label="メールで連絡する">
+                        <img src="images/icons/gmail.png" alt="" class="social__icon">
+                    </a>
+                </li>
+            </ul>
+
+            <!-- ハンバーガーメニュー
+                 チェックボックスは hidden 属性を付けず、CSSで見た目だけ隠す
+                 （hidden を付けるとキーボードで開けなくなるため） -->
+            <input type="checkbox" id="menu-toggle" class="menu__toggle">
+            <label class="menu__icon" for="menu-toggle" aria-label="メニューを開く">
+                <span class="menu__line"></span>
+                <span class="menu__line"></span>
+                <span class="menu__line"></span>
+            </label>
+
+            <nav class="header-nav" aria-label="メインメニュー">
+                <ul class="header-nav__list" role="list">
+                    <li class="header-nav__item"><a href="#top" class="header-nav__link">Top</a></li>
+                    <li class="header-nav__item"><a href="#works" class="header-nav__link">Works</a></li>
+                    <li class="header-nav__item"><a href="#about" class="header-nav__link">About</a></li>
+                    <li class="header-nav__item"><a href="mailto:prajnyaparamitta@gmail.com"
+                            class="header-nav__link">Contact</a></li>
+                    <!-- 文章のページを作る場合はここに追加 -->
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <!-- ============ 最初の画面（12枚のジャケットが円環になってゆっくり回る） ============ -->
+            <section class="hero" aria-label="イントロ">
+                <div class="ring">
+                    <ul class="ring__list" role="list">
+                        <li class="ring__item" style="--i: 0;">
+                            <a href="songs/one-sunny-day.html" class="ring__link">
+                                <img src="images/jackets/one-sunny-day.webp" alt="One Sunny Day" class="ring__jacket">
+                            </a>
+                        </li>
+                        <li class="ring__item" style="--i: 1;">
+                            <a href="songs/gathering-your-pieces.html" class="ring__link">
+                                <img src="images/jackets/gathering-your-pieces.webp" alt="Gathering Your Pieces" class="ring__jacket">
+                            </a>
+                        </li>
+                        <li class="ring__item" style="--i: 2;">
+                            <a href="songs/the-most-beautiful.html" class="ring__link">
+                                <img src="images/jackets/the-most-beautiful.webp" alt="The Most Beautiful" class="ring__jacket">
+                            </a>
+                        </li>
+                        <li class="ring__item" style="--i: 3;">
+                            <a href="songs/shes-just-turned-30-years-old.html" class="ring__link">
+                                <img src="images/jackets/shes-just-turned-30-years-old.webp" alt="She's Just Turned 30 Years Old" class="ring__jacket">
+                            </a>
+                        </li>
+                        <li class="ring__item" style="--i: 4;">
+                            <a href="songs/then-ill-be-you.html" class="ring__link">
+                                <img src="images/jackets/then-ill-be-you.webp" alt="Then I'll Be You" class="ring__jacket">
+                            </a>
+                        </li>
+                        <li class="ring__item" style="--i: 5;">
+                            <a href="songs/moonlight-on-the-threshold.html" class="ring__link">
+                                <img src="images/jackets/moonlight-on-the-threshold.webp" alt="Moonlight on the Threshold" class="ring__jacket">
+                            </a>
+                        </li>
+                        <li class="ring__item" style="--i: 6;">
+                            <a href="songs/everything-you-do-while-youre-asleep.html" class="ring__link">
+                                <img src="images/jackets/everything-you-do-while-youre-asleep.webp" alt="Everything You Do While You're Asleep" class="ring__jacket">
+                            </a>
+                        </li>
+                        <li class="ring__item" style="--i: 7;">
+                            <a href="songs/pale-mermaid.html" class="ring__link">
+                                <img src="images/jackets/pale-mermaid.webp" alt="Pale Mermaid" class="ring__jacket">
+                            </a>
+                        </li>
+                        <li class="ring__item" style="--i: 8;">
+                            <a href="songs/only-sweet-songs-remain.html" class="ring__link">
+                                <img src="images/jackets/only-sweet-songs-remain.webp" alt="Only Sweet Songs Remain" class="ring__jacket">
+                            </a>
+                        </li>
+                        <li class="ring__item" style="--i: 9;">
+                            <a href="songs/you-are-my-angel.html" class="ring__link">
+                                <img src="images/jackets/you-are-my-angel.webp" alt="You Are My Angel" class="ring__jacket">
+                            </a>
+                        </li>
+                        <li class="ring__item" style="--i: 10;">
+                            <a href="songs/dusk-takes-a-shape.html" class="ring__link">
+                                <img src="images/jackets/dusk-takes-a-shape.webp" alt="Dusk takes a shape" class="ring__jacket">
+                            </a>
+                        </li>
+                        <li class="ring__item" style="--i: 11;">
+                            <a href="songs/drowning-in-blue-skies.html" class="ring__link">
+                                <img src="images/jackets/drowning-in-blue-skies.webp" alt="Drowning in Blue Skies" class="ring__jacket">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 下へスクロールできることの目印。押すと Works へ下りる -->
+                <a href="#works" class="hero__scroll">
+                    <span class="hero__scroll-text">Scroll</span>
+                    <span class="hero__scroll-line" aria-hidden="true"></span>
+                </a>
+            </section>
+
+            <!-- ============ ジャケットのグリッド（12曲） ============
+                 ページの7〜8割を占める。PCは4列×3段、スマホは1列
+                 曲名は画像の下にテキストで表示する。画像と曲名を同じリンクで囲み、
+                 どちらを押しても曲ページに飛ぶようにする。
+                 曲名がすぐ下にあるので、画像の alt は空にする（読み上げで曲名が二重にならないように）
+                 view-transition-name は曲ページのジャケットと同じ名前にする（ページ移動でつながって見せるため） -->
+            <section class="works" id="works">
+                <h2 class="works__title">Works</h2>
+
+                <ul class="works__list" role="list">
+                    <li class="works__item">
+                        <a href="songs/one-sunny-day.html" class="works__link">
+                            <img src="images/jackets/one-sunny-day.webp" alt="" style="view-transition-name: jacket-one-sunny-day;" class="works__jacket">
+                            <span class="works__name">One Sunny Day</span>
+                        </a>
+                    </li>
+                    <li class="works__item">
+                        <a href="songs/gathering-your-pieces.html" class="works__link">
+                            <img src="images/jackets/gathering-your-pieces.webp" alt="" style="view-transition-name: jacket-gathering-your-pieces;" class="works__jacket">
+                            <span class="works__name">Gathering Your Pieces</span>
+                        </a>
+                    </li>
+                    <li class="works__item">
+                        <a href="songs/the-most-beautiful.html" class="works__link">
+                            <img src="images/jackets/the-most-beautiful.webp" alt="" style="view-transition-name: jacket-the-most-beautiful;" class="works__jacket">
+                            <span class="works__name">The Most Beautiful</span>
+                        </a>
+                    </li>
+                    <li class="works__item">
+                        <a href="songs/shes-just-turned-30-years-old.html" class="works__link">
+                            <img src="images/jackets/shes-just-turned-30-years-old.webp" alt="" style="view-transition-name: jacket-shes-just-turned-30-years-old;" class="works__jacket">
+                            <span class="works__name">She's Just Turned 30 Years Old</span>
+                        </a>
+                    </li>
+                    <li class="works__item">
+                        <a href="songs/then-ill-be-you.html" class="works__link">
+                            <img src="images/jackets/then-ill-be-you.webp" alt="" style="view-transition-name: jacket-then-ill-be-you;" class="works__jacket">
+                            <span class="works__name">Then I'll Be You</span>
+                        </a>
+                    </li>
+                    <li class="works__item">
+                        <a href="songs/moonlight-on-the-threshold.html" class="works__link">
+                            <img src="images/jackets/moonlight-on-the-threshold.webp" alt="" style="view-transition-name: jacket-moonlight-on-the-threshold;" class="works__jacket">
+                            <span class="works__name">Moonlight on the Threshold</span>
+                        </a>
+                    </li>
+                    <li class="works__item">
+                        <a href="songs/everything-you-do-while-youre-asleep.html" class="works__link">
+                            <img src="images/jackets/everything-you-do-while-youre-asleep.webp" alt=""
+                                style="view-transition-name: jacket-everything-you-do-while-youre-asleep;" class="works__jacket">
+                            <span class="works__name">Everything You Do While You're Asleep</span>
+                        </a>
+                    </li>
+                    <li class="works__item">
+                        <a href="songs/pale-mermaid.html" class="works__link">
+                            <img src="images/jackets/pale-mermaid.webp" alt="" style="view-transition-name: jacket-pale-mermaid;" class="works__jacket">
+                            <span class="works__name">Pale Mermaid</span>
+                        </a>
+                    </li>
+                    <li class="works__item">
+                        <a href="songs/only-sweet-songs-remain.html" class="works__link">
+                            <img src="images/jackets/only-sweet-songs-remain.webp" alt="" style="view-transition-name: jacket-only-sweet-songs-remain;" class="works__jacket">
+                            <span class="works__name">Only Sweet Songs Remain</span>
+                        </a>
+                    </li>
+                    <li class="works__item">
+                        <a href="songs/you-are-my-angel.html" class="works__link">
+                            <img src="images/jackets/you-are-my-angel.webp" alt="" style="view-transition-name: jacket-you-are-my-angel;" class="works__jacket">
+                            <span class="works__name">You Are My Angel</span>
+                        </a>
+                    </li>
+                    <li class="works__item">
+                        <a href="songs/dusk-takes-a-shape.html" class="works__link">
+                            <img src="images/jackets/dusk-takes-a-shape.webp" alt="" style="view-transition-name: jacket-dusk-takes-a-shape;" class="works__jacket">
+                            <span class="works__name">Dusk takes a shape</span>
+                        </a>
+                    </li>
+                    <li class="works__item">
+                        <a href="songs/drowning-in-blue-skies.html" class="works__link">
+                            <img src="images/jackets/drowning-in-blue-skies.webp" alt="" style="view-transition-name: jacket-drowning-in-blue-skies;" class="works__jacket">
+                            <span class="works__name">Drowning in Blue Skies</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- ============ About ============
+                 英語の本文の下に、同じ内容の日本語をかっこ書きで載せる -->
+            <section class="about" id="about">
+                <h2 class="about__title">About</h2>
+                <div class="about__body">
+                    <!-- 英語 -->
+                    <div class="about__en" lang="en">
+                        <p class="about__name">Hayato.M (Lyrics &amp; Music)</p>
+                        <p>I was born in 1975.</p>
+                        <p>At 16, I was baptized by rock 'n' roll. From the age of 20, I also came to love classical music, and I earned a master's degree in literature for my work on Bach's Passions and cantatas.<br>
+                            The music I love also covers a wide range, including hard rock and heavy metal, jazz, idol pop, and shoegaze/dream pop.</p>
+                        <p>It is no exaggeration to say that I live to listen to good music. For me, music is everything.<br>
+                            Rather than relying on what critics say, I value listening closely with my own ears. A song I have heard hundreds of times can suddenly sound completely different one day. I believe that this endless depth, which can never be fully explored, is the true charm of great music.</p>
+                        <p>I began writing my own songs in my twenties. My songs start as voice-and-guitar recordings. I translate the Japanese lyrics into English, arrange the songs with the AI music generator Suno, and then release them.<br>
+                            My theme is love. The words of each song are traces of my struggle to capture in language a never-ending spring of love.</p>
+                    </div>
+
+                    <!-- 日本語（かっこ書き） -->
+                    <div class="about__ja">
+                        <p class="about__name">（Hayato.M（作詞・作曲）</p>
+                        <p>1975年生まれ。</p>
+                        <p>16歳でロックンロールの洗礼を受ける。20歳よりクラシックにも親しみ、バッハの受難曲・カンタータで文学修士号を取得。<br>
+                            ほかにもHR/HM、ジャズ、アイドルポップ、シューゲイザー／ドリームポップと、愛聴する音楽は多岐にわたる。</p>
+                        <p>「良い音楽を聴くために生きている」と言っても過言ではないほど、音楽がすべて。<br>
+                            評論家の評価に頼らず、自分の耳で聴き込むことを大切にする。何百回と聴いた曲が、ある日突然まったく違って聴こえる。その汲み尽くせないことこそが優れた音楽の魅力と考える。</p>
+                        <p>20代から自作曲の制作を始める。ギターの弾き語りで生まれた楽曲の日本語詞を英詞にし、音楽生成AI「Suno」でアレンジするスタイルで作品を発表。<br>
+                            テーマは「愛」。各楽曲の詩は、汲めども尽きない愛の源泉を言葉で捕らえようと試みた苦闘の跡。）</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ============ フッター ============ -->
+    <footer class="footer">
+        <p class="footer__text">&copy; All rights reserved.</p>
+    </footer>
+
+    <a href="#top" class="to-top" aria-label="ページトップに戻る">↑</a>
+</body>
+
+</html>
