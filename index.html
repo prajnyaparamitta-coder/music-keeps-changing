@@ -21,7 +21,6 @@
 
         <!-- ============ ヘッダー ============ -->
         <header class="header">
-            <!-- 【仮】ページタイトル（ロゴ画像にするなら img に差し替え） -->
             <h1 class="header__title">
                 <a href="index.html" class="header__title-link">Music Keeps Changing</a>
             </h1>
@@ -83,7 +82,6 @@
                     <li class="header-nav__item"><a href="#about" class="header-nav__link">About</a></li>
                     <li class="header-nav__item"><a href="mailto:prajnyaparamitta@gmail.com"
                             class="header-nav__link">Contact</a></li>
-                    <!-- 文章のページを作る場合はここに追加 -->
                 </ul>
             </nav>
         </header>
@@ -251,7 +249,6 @@
             <section class="about" id="about">
                 <h2 class="about__title">About</h2>
                 <div class="about__body">
-                    <!-- 英語 -->
                     <div class="about__en" lang="en">
                         <p class="about__name"><b>Hayato.M</b> (Lyrics &amp; Music)</p>
                         <p>I was born in 1975.</p>
@@ -272,7 +269,6 @@
                             never-ending spring of love.</p>
                     </div>
 
-                    <!-- 日本語（かっこ書き） -->
                     <div class="about__ja">
                         <p class="about__name"><b>Hayato.M</b>（作詞・作曲）</p>
                         <p>1975年生まれ。</p>
@@ -302,7 +298,8 @@
         <div class="player__info">
             <p class="player__title"></p>
             <input type="range" class="player__seek" min="0" max="100" step="0.1" value="0" aria-label="再生位置">
-            <p class="player__time"><span class="player__current">0:00</span><span class="player__duration">0:00</span></p>
+            <p class="player__time"><span class="player__current">0:00</span><span class="player__duration">0:00</span>
+            </p>
         </div>
         <div class="player__controls">
             <button type="button" class="player__button" data-action="prev" aria-label="前の曲">
