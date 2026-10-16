@@ -121,14 +121,14 @@
                 </a>
             </section>
 
-            <!-- ============ ジャケットのグリッド（12曲） ============
-                 ページの7〜8割を占める。PCは4列×4段、スマホは1列
+            <!-- ============ ジャケットのグリッド ============
+                 PCは4列×4段、スマホは1列
                  曲名は画像の下にテキストで表示する。画像と曲名を同じリンクで囲み、どちらを押しても曲ページに飛ぶようにする。
                  曲名がすぐ下にあるので、画像の alt は空にする（読み上げで曲名が二重にならないように）
                  view-transition-name は曲ページのジャケットと同じ名前にする（ページ移動でつながって見せるため） -->
             <section class="works" id="works">
                 <h2 class="works__title">Works</h2>
-
+                <button type="button" class="play-all" id="play-all">Play All</button>
                 <ul class="works__list" role="list">
                     <li class="works__item">
                         <a href="songs/one-sunny-day.html" class="works__link">
@@ -295,6 +295,39 @@
     </footer>
 
     <a href="#top" class="to-top" aria-label="ページトップに戻る">↑</a>
+
+    <!-- ============ プレイリストのバー（「Play All」を押すと下から出る） ============ -->
+    <div class="player" id="player">
+        <img src="" alt="" class="player__jacket">
+        <div class="player__info">
+            <p class="player__title"></p>
+            <input type="range" class="player__seek" min="0" max="100" step="0.1" value="0" aria-label="再生位置">
+            <p class="player__time"><span class="player__current">0:00</span><span class="player__duration">0:00</span></p>
+        </div>
+        <div class="player__controls">
+            <button type="button" class="player__button" data-action="prev" aria-label="前の曲">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 6h2v12H6zM9.5 12 18 18V6z" />
+                </svg>
+            </button>
+            <button type="button" class="player__button player__button--main" data-action="toggle" aria-label="再生">
+                <svg class="player__icon-play" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg class="player__icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+                </svg>
+            </button>
+            <button type="button" class="player__button" data-action="next" aria-label="次の曲">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z" />
+                </svg>
+            </button>
+        </div>
+        <audio class="player__audio" preload="none"></audio>
+    </div>
+
+    <script src="js/playlist.js"></script>
 </body>
 
 </html>

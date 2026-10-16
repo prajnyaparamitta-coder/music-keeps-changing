@@ -869,3 +869,133 @@ body:has(.menu__toggle:checked) { overflow: hidden; }
   width: 20px;
   height: 20px;
 }
+
+/* ---------- トップ：プレイリスト ---------- */
+.play-all {
+  display: block;
+  margin: -8px auto 32px;
+  padding: 8px 32px;
+  font-family: var(--font-latin);
+  font-size: 1.125rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  background: none;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.play-all:hover {
+  color: var(--accent-ink);
+  background-color: var(--accent);
+}
+
+/* 画面の下に固定するバー。最初は画面の外に隠しておく */
+.player {
+  --player-h: 72px;
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 95;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  height: var(--player-h);
+  padding-inline: var(--edge);
+  background: rgb(20 20 20 / 0.95);
+  border-top: 1px solid var(--line);
+  translate: 0 100%;
+  visibility: hidden;
+  transition: translate 0.4s ease, visibility 0.4s;
+}
+
+.player.is-active {
+  translate: 0 0;
+  visibility: visible;
+}
+
+.player__jacket {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+}
+
+.player__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.player__title {
+  overflow: hidden;
+  font-family: var(--font-latin);
+  font-size: 1rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+.player__seek {
+  width: 100%;
+  accent-color: var(--accent);
+  display: block;
+  margin: 4px 0 6px;
+}
+
+.player__time {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--muted);
+}
+
+.player__controls {
+  display: flex;
+  flex: none;
+  gap: 4px;
+}
+
+.player__button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--text);
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.player__button svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.player__button--main {
+  color: var(--accent-ink);
+  background: var(--accent);
+}
+
+/* 再生中は一時停止のマーク、止まっているときは再生のマークを出す */
+.player__icon-pause,
+.player.is-playing .player__icon-play {
+  display: none;
+}
+
+.player.is-playing .player__icon-pause {
+  display: block;
+}
+
+/* バーが出ている間は、ページの最後とトップへ戻るボタンがバーに隠れないようにする */
+body:has(.player.is-active) {
+  padding-bottom: 72px;
+}
+
+body:has(.player.is-active) .to-top {
+  bottom: calc(72px + var(--gutter));
+}
